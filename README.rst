@@ -14,7 +14,7 @@ JSON feed, and default admin configuration.
 Installation
 ------------
 
-It's on ::
+It's on `PyPI <https://pypi.python.org/pypi/django-flashbriefing>`_::
 
     pip install django-flashbriefing
 
