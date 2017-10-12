@@ -25,8 +25,7 @@ class FeedView(DetailView):
         return HttpResponseNotFound()
 
     def render_to_json(self):
-        # data = jsonfeed(self.object.published_items())
-        data = jsonfeed(self.object.items.all()[:5])
+        data = jsonfeed(self.object.published_items()[:5])
         if len(data) == 1:
             data = data[0]
         return JsonResponse(data, safe=False)
