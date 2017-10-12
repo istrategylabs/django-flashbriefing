@@ -11,7 +11,7 @@ def test_jsonfeed_single(client):
     feed = Feed.objects.create(title='FEED')
     Item.objects.create(
         feed=feed, title='ITEM', audio_content='/audio.mp3',
-        published_date=datetime.datetime.utcnow())
+        published_date=datetime.datetime(2017, 1, 1, 16, 20, 0))
     resp = client.get(feed.get_absolute_url())
     data = resp.json() if hasattr(resp, 'json') else json.loads(resp.content)
     assert isinstance(data, dict)
@@ -20,10 +20,10 @@ def test_jsonfeed_single(client):
 @pytest.mark.django_db
 def test_jsonfeed_multiple(client):
     feed = Feed.objects.create(title='FEED')
-    Item.objects.create(
-        feed=feed, title='ITEM-1', published_date=datetime.datetime.utcnow())
-    Item.objects.create(
-        feed=feed, title='ITEM-2', published_date=datetime.datetime.utcnow())
+    Item.objects.create(feed=feed, title='ITEM-1',
+                        published_date=datetime.datetime(2017, 1, 1, 16, 20, 0))
+    Item.objects.create(feed=feed, title='ITEM-2',
+                        published_date=datetime.datetime(2017, 1, 2, 16, 20, 0))
     resp = client.get(feed.get_absolute_url())
     data = resp.json() if hasattr(resp, 'json') else json.loads(resp.content)
     assert isinstance(data, list)
@@ -46,6 +46,27 @@ def test_rssfeed(client):
 
 @pytest.mark.django_db
 def test_published_date(client):
+
+    feed = Feed.objects.create(title='FEED')
+
+    now = datetime.datetime.utcnow()
+
+    past = Item.objects.create(
+        feed=feed, title='PAST',
+        published_date=now - datetime.timedelta(days=2))
+    Item.objects.create(
+        feed=feed, title='FUTURE',
+        published_date=now + datetime.timedelta(days=2))
+
+    resp = client.get(feed.get_absolute_url())
+    data = resp.json() if hasattr(resp, 'json') else json.loads(resp.content)
+
+    assert isinstance(data, dict)
+    assert data['titleText'] == past.title
+
+
+@pytest.mark.django_db
+def test_published_date_format(client):
     feed = Feed.objects.create(title='FEED')
     Item.objects.create(
         feed=feed, title='ITEM-1',
@@ -53,6 +74,25 @@ def test_published_date(client):
     resp = client.get(feed.get_absolute_url())
     data = resp.json() if hasattr(resp, 'json') else json.loads(resp.content)
     assert data['updateDate'] == '2017-01-01T16:20:00.0Z'
+
+
+@pytest.mark.django_db
+def test_published_flag(client):
+    feed = Feed.objects.create(title='FEED')
+    item = Item.objects.create(
+        feed=feed, title='ITEM',
+        published_date=datetime.datetime(2017, 1, 1, 16, 20, 0))
+
+    resp = client.get(feed.get_absolute_url())
+    data = resp.json() if hasattr(resp, 'json') else json.loads(resp.content)
+    assert isinstance(data, dict)
+
+    item.is_published = False
+    item.save()
+
+    resp = client.get(feed.get_absolute_url())
+    data = resp.json() if hasattr(resp, 'json') else json.loads(resp.content)
+    assert not data
 
 
 @pytest.mark.django_db
