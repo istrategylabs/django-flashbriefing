@@ -4,11 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-
 Django = "<1.12,>=1.11"
+
+[dev-packages]
 pytest = "<3.3,>=3.2"
 "pytest-django" = "<3.2,>=3.1"
 tox = "<2.8,>=2.7"
-
-
-[dev-packages]
