@@ -2,7 +2,7 @@ machine:
   python:
     version: 3.6.0
   post:
-    - pyenv global 2.7.12 3.5.2 3.6.0
+    - pyenv global 2.7.15 3.5.5 3.6.5
 test:
   override:
     - tox
