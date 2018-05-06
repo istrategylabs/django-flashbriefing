@@ -1,4 +1,5 @@
 import uuid
+from enum import Enum
 
 from django.db import models
 from django.utils import timezone
@@ -39,20 +40,16 @@ class Feed(models.Model):
             published_date__lte=now, is_published=True)[:5]
 
 
+class ItemType(Enum):
+    AUDIO = 'audio'
+    TEXT = 'text'
+
+
 class Item(models.Model):
-
-    TYPE_AUDIO = 'audio'
-    TYPE_TEXT = 'text'
-
-    ITEM_TYPE_CHOICES = (
-        (TYPE_AUDIO, 'Audio'),
-        (TYPE_TEXT, 'Text'),
-    )
-
     feed = models.ForeignKey(Feed, related_name='items')
     uuid = models.CharField(max_length=32, default=new_uuid)
     item_type = models.CharField(
-        max_length=16, choices=ITEM_TYPE_CHOICES, blank=True)
+        max_length=16, choices=[(t, t.value) for t in ItemType], blank=True)
     title = models.CharField(max_length=255)
     published_date = models.DateTimeField()
     is_published = models.BooleanField(default=True)
@@ -73,5 +70,5 @@ class Item(models.Model):
 
     def save(self, **kwargs):
         self.item_type = \
-            Item.TYPE_AUDIO if self.audio_content else Item.TYPE_TEXT
+            ItemType.AUDIO if self.audio_content else ItemType.TEXT
         super(Item, self).save(**kwargs)
