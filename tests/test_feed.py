@@ -36,7 +36,7 @@ def test_jsonfeed_multiple(client):
 @pytest.mark.django_db
 def test_jsonfeed(client):
     feed = Feed.objects.create(title='FEED')
-    resp = client.get('/briefings/feeds/{}.json'.format(feed.uuid))
+    resp = client.get('/briefings/feeds/{}.json'.format(feed.uuid.hex))
     assert resp.status_code == 200
     assert resp['Content-Type'] == 'application/json'
 
@@ -44,7 +44,7 @@ def test_jsonfeed(client):
 @pytest.mark.django_db
 def test_rssfeed(client):
     feed = Feed.objects.create(title='FEED')
-    resp = client.get('/briefings/feeds/{}.rss'.format(feed.uuid))
+    resp = client.get('/briefings/feeds/{}.rss'.format(feed.uuid.hex))
     assert resp.status_code == 404
 
 
