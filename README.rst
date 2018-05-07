@@ -34,11 +34,6 @@ Add a route to *urls.py*::
         ...
     ]
 
-On Django 1.8, the namespace needs to be explicitly included on the URL config::
-
-    url(r'^briefings/',
-        include('flashbriefing.urls', namespace='flashbriefing')),
-
 Run migrations::
 
     python manage.py migrate

@@ -14,16 +14,17 @@ except ImportError:
 def audio_upload_path(instance, filename):
     name, ext = filename.rsplit('.', 1)
     return 'flashbriefing/{}/{}.{}'.format(
-        instance.feed.uuid, instance.uuid, ext)
+        instance.feed.uuid.hex, instance.uuid.hex, ext)
 
 
+# TODO: remove in a couple releases, upon squashing of existing migrations
 def new_uuid():
     return uuid.uuid4().hex
 
 
 class Feed(models.Model):
     title = models.CharField(max_length=128)
-    uuid = models.CharField(max_length=32, default=new_uuid)
+    uuid = models.UUIDField(default=uuid.uuid4)
 
     class Meta:
         ordering = ('title',)
@@ -32,7 +33,7 @@ class Feed(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('flashbriefing:feed', args=[self.uuid, 'json'])
+        return reverse('flashbriefing:feed', args=[self.uuid.hex, 'json'])
 
     def published_items(self):
         now = timezone.now()
@@ -46,8 +47,9 @@ class ItemType(Enum):
 
 
 class Item(models.Model):
-    feed = models.ForeignKey(Feed, related_name='items')
-    uuid = models.CharField(max_length=32, default=new_uuid)
+    feed = models.ForeignKey(
+        Feed, related_name='items', on_delete=models.CASCADE)
+    uuid = models.UUIDField(default=uuid.uuid4)
     item_type = models.CharField(
         max_length=16, choices=[(t, t.value) for t in ItemType], blank=True)
     title = models.CharField(max_length=255)
