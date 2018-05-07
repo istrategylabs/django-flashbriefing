@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f8417b6aafa08365844f0652a4bdf4b307f9eb5381303b9b6f8b3cc7f1589731"
+            "sha256": "6f0049c78ac7cfa35adfa715e7dd73b7555a1c6ce02f27fb0f8247bde6d33bec"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -91,14 +91,6 @@
             ],
             "index": "pypi",
             "version": "==3.0.0"
-        },
-        "tox-pyenv": {
-            "hashes": [
-                "sha256:916c2213577aec0b3b5452c5bfb32fd077f3a3196f50a81ad57d7ef3fc2599e4",
-                "sha256:e470c18af115fe52eeff95e7e3cdd0793613eca19709966fc2724b79d55246cb"
-            ],
-            "index": "pypi",
-            "version": "==1.1.0"
         },
         "virtualenv": {
             "hashes": [
