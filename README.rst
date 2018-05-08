@@ -16,7 +16,7 @@ Installation
 
 It's on `PyPI <https://pypi.python.org/pypi/django-flashbriefing>`_::
 
-    pip install django-flashbriefing
+    pipenv install django-flashbriefing
 
 Add to *INSTALLED_APPS*::
 
