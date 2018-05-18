@@ -4,8 +4,8 @@ long_description = open('README.rst').read()
 
 setup(
     name="django-flashbriefing",
-    version='1.0',
-    packages=["flashbriefing"],
+    version='1.0.1',
+    packages=["flashbriefing", "flashbriefing.migrations"],
     include_package_data=True,
     description="Amazon Alexa Flash Briefings for Django",
     url="https://github.com/istrategylabs/django-flashbriefing",
